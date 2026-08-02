@@ -1,0 +1,20 @@
+# Wires up OPA's built-in Envoy ext_authz gRPC plugin. agentgateway routes
+# ext_authz CheckRequests here (spec.traffic.extAuth.backendRef -> this service
+# on the gRPC port below); OPA evaluates them against policies/authz.rego.
+plugins:
+  envoy_ext_authz_grpc:
+    # gRPC listen address for the ext_authz service (agentgateway's backendRef
+    # port). Envoy's default ext_authz port; matches the reference demo.
+    addr: ":9191"
+    # Decision path: resolves to data.agentgateway.authz.allow, i.e. rule
+    # `allow` in package `agentgateway.authz`. A truthy result allows the
+    # request; false/undefined denies it.
+    path: agentgateway/authz/allow
+    # Enforce decisions (true would allow everything, for testing only).
+    dry-run: false
+    # gRPC server reflection, so grpcurl can introspect the service in demos.
+    enable-reflection: true
+
+# Emit each authorization decision to the container logs for demo visibility.
+decision_logs:
+  console: true

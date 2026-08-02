@@ -1,0 +1,25 @@
+{
+  "org_members": {
+    "acme": ["alice", "bob"]
+  },
+  "team_members": {
+    "acme-ml": ["bob"]
+  },
+  "provider_org_can_use": {
+    "openai": ["acme"]
+  },
+  "provider_extra_can_use": {
+    "openai": ["dave"]
+  },
+  "model_provider": {
+    "gpt-4o": "openai",
+    "gpt-3.5-turbo": "openai",
+    "claude-sonnet-5": "anthropic"
+  },
+  "model_team_allowed": {
+    "claude-sonnet-5": ["acme-ml"]
+  },
+  "model_direct": {
+    "gpt-4o": ["erin", "mcp-user"]
+  }
+}

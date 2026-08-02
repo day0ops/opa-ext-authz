@@ -1,0 +1,33 @@
+#### OS Generated ####
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+#### IDE ####
+.idea/
+*.iws
+*.iml
+*.ipr
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+*.code-workspace
+.history/
+*.swp
+*.swo
+*~
+
+#### Environments ####
+.env
+.env.local
+.env.*.local
+
+#### OPA local output ####
+*.log
+bundle.tar.gz
