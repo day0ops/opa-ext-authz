@@ -1,6 +1,6 @@
 IMAGE       := opa-ext-authz
 REPO        ?= australia-southeast1-docker.pkg.dev/field-engineering-apac/kasunt
-VERSION     ?= $(shell git describe --tags --always --dirty 2>/dev/null || echo dev)
+VERSION     ?= $(patsubst v%,%,$(shell git describe --tags --always --dirty 2>/dev/null || echo dev))
 PLATFORMS   := linux/amd64,linux/arm64
 LOCAL_IMAGE := $(IMAGE):local
 

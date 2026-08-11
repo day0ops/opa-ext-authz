@@ -38,7 +38,8 @@ jobs:
       - name: Compute build metadata
         id: meta
         run: |
-          echo "version=$(git describe --tags --always --dirty)" >> "$GITHUB_OUTPUT"
+          version="$(git describe --tags --always --dirty)"
+          echo "version=${version#v}" >> "$GITHUB_OUTPUT"
 
       - name: Authenticate to Google Cloud
         uses: google-github-actions/auth@v2
