@@ -2,7 +2,7 @@
 
 A thin packaging of [Open Policy Agent](https://www.openpolicyagent.org/) as an `ext_authz` authorization service for [agentgateway](https://agentgateway.dev).
 
-There is **no custom code** here. 
+There is **no custom code** here.
 
 OPA ships an official build with the `envoy_ext_authz_grpc` plugin compiled in, and it speaks the `ext_authz` v3 gRPC protocol natively. This repo just layers Rego authorization policies and static relationship data on top of that image, plus the config that wires up the plugin. (Contrast the sibling `openfga-ext-authz`, which needs a custom Go gRPC adapter because OpenFGA has no native ext_authz support.)
 
@@ -81,6 +81,22 @@ You can also evaluate the decision path directly against a mock input:
 echo '{"attributes":{"request":{"http":{"headers":{"x-user-id":"bob"},"body":"{\"model\":\"claude-sonnet-5\"}"}}}}' \
   | opa eval -d policies/ -I -f raw 'data.agentgateway.authz.allow'
 # => true
+```
+
+## MCP API-key demo
+
+`policies/mcp_authz.rego` adds a second, independent `allow` branch to the same `agentgateway.authz` package (Rego lets a package span multiple files) for a separate demo: gating an MCP route with a plain API key instead of the ReBAC model above.
+
+- `input.attributes.request.http.headers["x-api-key"]` - the caller-supplied key (header keys arrive already lowercased).
+- The key must appear in `data.mcp_valid_api_keys` (see [`policies/data.json`](policies/data.json)).
+
+Both demos are served by the same running OPA pod under the same decision path (`agentgateway/authz/allow`) - a request is allowed if _either_ branch matches, so the two demos never interfere with each other.
+
+```bash
+curl -s localhost:8181/v1/data/agentgateway/authz/allow \
+  -H 'content-type: application/json' \
+  -d '{"input":{"attributes":{"request":{"http":{"headers":{"x-api-key":"demo-mcp-api-key-12345"}}}}}}'
+# => {"result":true}
 ```
 
 ## Wiring into agentgateway

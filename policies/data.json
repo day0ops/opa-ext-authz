@@ -21,5 +21,6 @@
   },
   "model_direct": {
     "gpt-4o": ["erin", "mcp-user"]
-  }
+  },
+  "mcp_valid_api_keys": ["demo-mcp-api-key-12345"]
 }
